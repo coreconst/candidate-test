@@ -13,6 +13,9 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
+hooks:
+  post-start:
+    - exec: "npm run dev -- --host"
 
 # Key features of DDEV's config.yaml:
 

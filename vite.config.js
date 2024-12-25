@@ -17,4 +17,10 @@ export default defineConfig({
             },
         }),
     ],
+    server : {
+        hmr:{
+            host: process.env.DDEV_HOSTNAME,
+            protocol : 'wss'
+        }
+    }
 });
