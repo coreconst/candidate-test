@@ -5,10 +5,16 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import SelectInput from "@/Components/SelectInput.vue";
+
+const props = defineProps(['roles']);
+const roles = props.roles;
+const ucFirst = (str) => str[0].toUpperCase() + str.slice(1);
 
 const form = useForm({
     name: '',
     email: '',
+    role: roles[0],
     password: '',
     password_confirmation: '',
 });
@@ -54,6 +60,22 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="role" value="Role" />
+
+                <SelectInput
+                    id="role"
+                    class="mt-1 block w-full"
+                    v-model="form.role"
+                    required
+                    autocomplete="candidate"
+                >
+                    <option v-for="role in roles" :value="role">{{ucFirst(role)}}</option>
+                </SelectInput>
+
+                <InputError class="mt-2" :message="form.errors.role" />
             </div>
 
             <div class="mt-4">
