@@ -1,13 +1,19 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { usePage } from '@inertiajs/vue3'
+
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const page = usePage()
+const isRecruiter = computed(() => page.props.auth.user.role).value === 'recruiter';
+
 </script>
 
 <template>
@@ -34,10 +40,10 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="isRecruiter ? route('recruiter-tests.index') : route('candidate-tests.index')"
+                                    :active="isRecruiter ? route().current('recruiter-tests.index') : route().current('candidate-tests.index')"
                                 >
-                                    Dashboard
+                                    Tests
                                 </NavLink>
                             </div>
                         </div>
