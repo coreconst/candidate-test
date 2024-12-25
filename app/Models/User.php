@@ -56,6 +56,11 @@ class User extends Authenticatable
 
     public function isRecruiter(): bool
     {
-        return $this->role === UserRole::Recruiter;
+        return $this->role === UserRole::Recruiter->value;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
     }
 }
