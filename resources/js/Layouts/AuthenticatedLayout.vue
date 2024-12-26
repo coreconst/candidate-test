@@ -45,6 +45,10 @@ const isRecruiter = computed(() => page.props.auth.user.role).value === 'recruit
                                 >
                                     Tests
                                 </NavLink>
+                                <NavLink :href="route('recruiter-assignment.index')"
+                                         v-if="isRecruiter">
+                                    Assignments
+                                </NavLink>
                             </div>
                         </div>
 

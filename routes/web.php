@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/recruiter-tests/delete/{testId}', [RecruiterTestController::class, 'delete'])->name('recruiter-tests.delete');
 
+        Route::get('/recruiter-assignment', [RecruiterAssignmentController::class, 'index'])->name('recruiter-assignment.index');
+
         Route::get('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'assign'])->name('recruiter-assignment.assign');
         Route::post('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'store']);
     });

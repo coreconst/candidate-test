@@ -11,6 +11,24 @@ use Inertia\Response;
 
 class RecruiterAssignmentController extends Controller
 {
+    public function index(): Response
+    {
+        $assignments = auth()->user()->assignments()->with(['user:id,email', 'test:id,title'])->get();
+        $filteredAssignments = $assignments->map(fn ($assignment) => [
+                'id' => $assignment->id,
+                'user_email' => $assignment->user->email,
+                'test_title' => $assignment->test->title,
+                'status' => $assignment->status === TestStatus::InProgress->value
+                    ? TestStatus::InProgress->label()
+                    : TestStatus::Completed->label()
+            ]
+        );
+
+        return Inertia::render('Tests/Recruiter/Assignments', [
+            'assignments' => $filteredAssignments,
+        ]);
+    }
+
     public function assign(string $testId): Response
     {
         $users = User::where('role', UserRole::Candidate->value)->get();
