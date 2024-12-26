@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CandidateTestController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecruiterAssignmentController;
 use App\Http\Controllers\RecruiterTestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/recruiter-tests/{testId}', [RecruiterTestController::class, 'update']);
 
         Route::post('/recruiter-tests/delete/{testId}', [RecruiterTestController::class, 'delete'])->name('recruiter-tests.delete');
+
+        Route::get('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'assign'])->name('recruiter-assignment.assign');
+        Route::post('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'store']);
     });
 });
 
