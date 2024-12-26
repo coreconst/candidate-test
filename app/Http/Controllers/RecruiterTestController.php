@@ -78,6 +78,15 @@ class RecruiterTestController extends Controller
 
         $questions = json_decode($request->questions, true);
 
+        $deleteQuestions = $test->questions()
+            ->pluck('id')
+            ->diff(collect($questions)->pluck('id'))
+            ->toArray();
+
+        foreach ($deleteQuestions as $deleteId){
+            $test->questions()->find($deleteId)->delete();
+        }
+
         foreach ($questions as $question){
             if(!empty($question)){
 
@@ -92,8 +101,6 @@ class RecruiterTestController extends Controller
                 }
             }
         }
-
-
 
         return redirect(route('recruiter-tests.index'));
     }
