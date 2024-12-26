@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TestStatus;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -31,12 +32,17 @@ class RecruiterAssignmentController extends Controller
 
     public function assign(string $testId): Response
     {
-        $users = User::where('role', UserRole::Candidate->value)->get();
 
         /** @var \App\Models\Test $test */
         $test = auth()->user()->ownTests()->find($testId);
 
-        return Inertia::render('Tests/Recruiter/Assignment', [
+        $assignments = auth()->user()->assignments()->where('test_id', $test->id)->get()->pluck('user_id');
+
+        $users = User::where('role', UserRole::Candidate->value)
+            ->whereNotIn('id', $assignments)
+            ->get();
+
+        return Inertia::render('Tests/Recruiter/AssignTest', [
             'users' => $users,
             'test' => [
                 'title' => $test->title,
@@ -58,6 +64,6 @@ class RecruiterAssignmentController extends Controller
             $user->assignTest($test->id);
         }
 
-        return redirect(route('recruiter-tests.index'));
+        return redirect(route('recruiter-assignment.index'));
     }
 }
