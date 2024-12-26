@@ -49,7 +49,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function recruiterTests(): HasMany
+    public function ownTests(): HasMany
     {
         return $this->hasMany(Test::class);
     }

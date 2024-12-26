@@ -12,7 +12,7 @@ class RecruiterTestController extends Controller
     public function index(): Response
     {
         return Inertia::render('Tests/Recruiter/Index', [
-            'tests' => auth()->user()->recruiterTests()->get()->toArray()
+            'tests' => auth()->user()->ownTests()->get()->toArray()
         ]);
     }
 
@@ -30,7 +30,7 @@ class RecruiterTestController extends Controller
         ]);
 
         /** @var \App\Models\Test $test */
-         $test = auth()->user()->recruiterTests()->create([
+         $test = auth()->user()->ownTests()->create([
             'title' => $request->title,
             'description' => $request->description
         ]);
@@ -49,7 +49,7 @@ class RecruiterTestController extends Controller
     public function edit(string $testId): Response
     {
         /** @var \App\Models\Test $test */
-        $test = auth()->user()->recruiterTests()?->find($testId);
+        $test = auth()->user()->ownTests()?->find($testId);
         if(!$test) abort(404);
 
         /** @var array $questions */
@@ -69,7 +69,7 @@ class RecruiterTestController extends Controller
         ]);
 
         /** @var \App\Models\Test $test */
-        $test = auth()->user()->recruiterTests()->find($testId);
+        $test = auth()->user()->ownTests()->find($testId);
 
         $test->update([
             'title' => $request->title,
@@ -108,7 +108,7 @@ class RecruiterTestController extends Controller
     public function delete(string $testId): RedirectResponse
     {
         /** @var \App\Models\Test $test */
-        $test = auth()->user()->recruiterTests()->find($testId);
+        $test = auth()->user()->ownTests()->find($testId);
         $test->delete();
 
         return redirect(route('recruiter-tests.index'));
