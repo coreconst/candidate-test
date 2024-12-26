@@ -8,6 +8,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Textarea from "@/Components/Textarea.vue";
 import {ref} from "vue";
 import Questions from "@/Pages/Tests/Partials/Questions.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps(['test']);
 const test = props.test ?? false;
@@ -41,6 +42,12 @@ const submit = () => {
         form.post(route('recruiter-tests.create'));
     }
 };
+
+const deleteTest = () => {
+    if(test && test['id']) {
+        form.post(route('recruiter-tests.delete', test['id']))
+    }
+}
 
 </script>
 
@@ -88,6 +95,9 @@ const submit = () => {
                         <Questions v-model="questions"/>
 
                         <div class="mt-4 flex items-center justify-end">
+                            <DangerButton v-if="test" @click.prevent="deleteTest">
+                                Delete Test
+                            </DangerButton>
 
                             <PrimaryButton
                                 class="ms-4"

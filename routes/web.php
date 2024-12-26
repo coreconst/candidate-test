@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/recruiter-tests/{testId}', [RecruiterTestController::class, 'edit'])->name('recruiter-tests.edit');
         Route::post('/recruiter-tests/{testId}', [RecruiterTestController::class, 'update']);
+
+        Route::post('/recruiter-tests/delete/{testId}', [RecruiterTestController::class, 'delete'])->name('recruiter-tests.delete');
     });
 });
 

@@ -104,4 +104,13 @@ class RecruiterTestController extends Controller
 
         return redirect(route('recruiter-tests.index'));
     }
+
+    public function delete(string $testId): RedirectResponse
+    {
+        /** @var \App\Models\Test $test */
+        $test = auth()->user()->recruiterTests()->find($testId);
+        $test->delete();
+
+        return redirect(route('recruiter-tests.index'));
+    }
 }
