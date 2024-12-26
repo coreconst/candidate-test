@@ -26,12 +26,22 @@ class RecruiterTestController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable',
+            'questions' => 'required'
         ]);
 
-        auth()->user()->recruiterTests()->create([
+        /** @var \App\Models\Test $test */
+         $test = auth()->user()->recruiterTests()->create([
             'title' => $request->title,
             'description' => $request->description
         ]);
+
+        foreach (json_decode($request->questions) as $question){
+            if(!empty($question)){
+                $test->questions()->create([
+                    'label' => $question
+                ]);
+            }
+        }
 
         return redirect(route('recruiter-tests.index'));
     }
