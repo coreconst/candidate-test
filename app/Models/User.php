@@ -49,9 +49,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function createdTests(): ?HasMany
+    public function recruiterTests(): HasMany
     {
-        return $this->isRecruiter() ? $this->hasMany(Test::class) : null;
+        return $this->hasMany(Test::class);
     }
 
     public function isRecruiter(): bool
