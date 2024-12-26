@@ -46,6 +46,7 @@ const isRecruiter = computed(() => page.props.auth.user.role).value === 'recruit
                                     Tests
                                 </NavLink>
                                 <NavLink :href="route('recruiter-assignment.index')"
+                                         :active="route().current('recruiter-assignment.index')"
                                          v-if="isRecruiter">
                                     Assignments
                                 </NavLink>
