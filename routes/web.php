@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/recruiter-tests/create', [RecruiterTestController::class, 'create'])->name('recruiter-tests.create');
         Route::post('/recruiter-tests/create', [RecruiterTestController::class, 'store']);
+
+        Route::get('/recruiter-tests/{testId}', [RecruiterTestController::class, 'edit'])->name('recruiter-tests.edit');
+        Route::post('/recruiter-tests/{testId}', [RecruiterTestController::class, 'update']);
     });
 });
 

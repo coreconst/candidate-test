@@ -9,31 +9,50 @@ import Textarea from "@/Components/Textarea.vue";
 import {ref} from "vue";
 import Questions from "@/Pages/Tests/Partials/Questions.vue";
 
+const props = defineProps(['test']);
+const test = props.test ?? false;
+
 const form = useForm({
-    title: '',
-    description: '',
+    title: test['title'] ?? '',
+    description: test['description'] ?? '',
     questions: ''
 });
 
+const questionsObj = {
+    1: { label: "", id: "" }
+};
 
-const questions = ref([""]);
+if(test && Object.keys(test['questions']).length){
+    let i = 1;
+    for(let key of Object.keys( test['questions']))
+    {
+        questionsObj[i] = { label: test['questions'][key], id: key };
+        i++;
+    }
+}
+
+const questions = ref(questionsObj);
 
 const submit = () => {
     form.questions = JSON.stringify(questions.value);
-    form.post(route('recruiter-tests.create'));
+    if(test && test['id']){
+        form.post(route('recruiter-tests.edit', test['id']))
+    } else {
+        form.post(route('recruiter-tests.create'));
+    }
 };
 
 </script>
 
 <template>
-    <Head title="Create Test" />
+    <Head title="Test" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Create Test
+                {{test ? 'Edit' : 'Create'}} Test
             </h2>
         </template>
 
@@ -75,7 +94,7 @@ const submit = () => {
                                 :class="{ 'opacity-25': form.processing }"
                                 :disabled="form.processing"
                             >
-                                Create
+                                {{test ? 'Update' : 'Create'}}
                             </PrimaryButton>
                         </div>
                     </form>

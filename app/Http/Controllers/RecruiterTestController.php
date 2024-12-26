@@ -18,7 +18,7 @@ class RecruiterTestController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Tests/Recruiter/Create');
+        return Inertia::render('Tests/Recruiter/Test');
     }
 
     public function store(Request $request): RedirectResponse
@@ -35,13 +35,65 @@ class RecruiterTestController extends Controller
             'description' => $request->description
         ]);
 
-        foreach (json_decode($request->questions) as $question){
+        foreach (json_decode($request->questions, true) as $question){
             if(!empty($question)){
                 $test->questions()->create([
-                    'label' => $question
+                    'label' => $question['label']
                 ]);
             }
         }
+
+        return redirect(route('recruiter-tests.index'));
+    }
+
+    public function edit(string $testId): Response
+    {
+        /** @var \App\Models\Test $test */
+        $test = auth()->user()->recruiterTests()?->find($testId);
+        if(!$test) abort(404);
+
+        /** @var array $questions */
+        $questions = $test->questions()->pluck('label', 'id')->all();
+
+        return Inertia::render('Tests/Recruiter/Test', [
+            'test' => array_merge($test->only('title', 'description', 'id'), ['questions' => $questions])
+        ]);
+    }
+
+    public function update(Request $request, string $testId): RedirectResponse
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable',
+            'questions' => 'required'
+        ]);
+
+        /** @var \App\Models\Test $test */
+        $test = auth()->user()->recruiterTests()->find($testId);
+
+        $test->update([
+            'title' => $request->title,
+            'description' => $request->description
+        ]);
+
+        $questions = json_decode($request->questions, true);
+
+        foreach ($questions as $question){
+            if(!empty($question)){
+
+                $questionData = [
+                    'label' => $question['label']
+                ];
+
+                if(!empty($question['id'])){
+                    $test->questions()->find($question['id'])->update($questionData);
+                } else {
+                    $test->questions()->create($questionData);
+                }
+            }
+        }
+
+
 
         return redirect(route('recruiter-tests.index'));
     }

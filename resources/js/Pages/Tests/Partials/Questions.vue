@@ -4,14 +4,15 @@ import InputLabel from "@/Components/InputLabel.vue";
 const questions = defineModel();
 
 const addQuestion = () => {
-    if(questions.value.length < 11){
-        questions.value.push("");
+    if(Object.keys(questions.value).length < 10){
+        const newId = Object.keys(questions.value).length + 1;
+        questions.value[newId] = { label: "", id: "" };
     }
 };
 
 const removeQuestion = () => {
-    if (questions.value.length > 1) {
-        questions.value.pop();
+    if (Object.keys(questions.value).length > 1) {
+        delete questions.value[Object.keys(questions.value).length];
     }
 };
 
@@ -24,12 +25,12 @@ const removeQuestion = () => {
         <h3>Questions</h3>
         <div class="flex flex-col gap-y-4 p-4">
             <div v-for="(question, index) in questions" :key="index">
-                <InputLabel :for="`question_${index}`" :value="`Question ${index + 1}`" />
+                <InputLabel :for="`question_${index}`" :value="`Question ${index}`" />
 
                 <input
                     :id="`question_${index}`"
                     type="text"
-                    v-model="questions[index]"
+                    v-model="question.label"
                     required
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
