@@ -66,4 +66,26 @@ class RecruiterAssignmentController extends Controller
 
         return redirect(route('recruiter-assignment.index'));
     }
+
+    public function show($assignmentId):Response
+    {
+        /** @var \App\Models\UserTest $assignment  */
+        $assignment = auth()->user()->assignments()->find($assignmentId);
+
+        /** @var \App\Models\Test $test */
+        $test = $assignment->test()->first();
+
+        $answers = $assignment->answers()->pluck('answer', 'question_id')->toArray();
+
+        $questions = $test->questions()->pluck('label', 'id')->toArray();
+
+        return Inertia::render('Tests/Recruiter/CompletedAssignment', [
+            'test' => [
+                'title' => $test->title,
+                'description' => $test->description,
+                'questions' => $questions,
+                'answers' => $answers
+            ]
+        ]);
+    }
 }

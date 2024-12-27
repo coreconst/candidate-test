@@ -21,7 +21,7 @@ const props = defineProps(['assignments']);
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <Table :columns="['User Email', 'Test Title', 'Status']" >
+                <Table :columns="['User Email', 'Test Title', 'Status', '']" >
                     <tr v-for="assignment in assignments"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -32,6 +32,15 @@ const props = defineProps(['assignments']);
                         </th>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ assignment['status'] }}
+                        </th>
+                        <th class="px-6 py-4">
+                            <a
+                                v-if="assignment['status'] === 'Completed'"
+                                :href="route('recruiter-assignment.show', assignment['id'])"
+                               class="underline text-blue-700 hover:text-blue-800"
+                            >
+                                Check
+                            </a>
                         </th>
                     </tr>
                 </Table>

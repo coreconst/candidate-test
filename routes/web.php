@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'assign'])->name('recruiter-assignment.assign');
         Route::post('/recruiter-assignment/{testId}', [RecruiterAssignmentController::class, 'store']);
+
+        Route::get('/recruiter-assignment/show/{assignmentId}', [RecruiterAssignmentController::class, 'show'])->name('recruiter-assignment.show');
     });
 });
 
