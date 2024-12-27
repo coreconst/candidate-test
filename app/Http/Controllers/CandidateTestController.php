@@ -19,8 +19,16 @@ class CandidateTestController extends Controller
 
     public function execute(string $testId): Response
     {
+        /** @var \App\Models\User $user  */
+        $user = auth()->user();
+
         /** @var \App\Models\Test $test */
-        $test = auth()->user()->assignedTests()->find($testId);
+        $test = $user->assignedTests()->find($testId);
+
+        /** @var \App\Models\UserTest $candidateAssignment  */
+        $candidateAssignment = $user->userTests()->firstWhere('test_id', $testId);
+
+        $answers = $candidateAssignment->answers()->pluck('answer', 'question_id')->toArray();
 
         $questions = $test->questions()->pluck('label', 'id')->toArray();
 
@@ -29,7 +37,8 @@ class CandidateTestController extends Controller
                 'id' => $test->id,
                 'title' => $test->title,
                 'description' => $test->description,
-                'questions' => $questions
+                'questions' => $questions,
+                'answers' => $answers
             ]
         ]);
     }
@@ -44,10 +53,10 @@ class CandidateTestController extends Controller
 
         foreach ($request['answers'] as $questionId => $answer){
             if(!empty($answer)){
-                $candidateAssignment->answers()->create([
-                    'question_id' => $questionId,
-                    'answer' => $answer
-                ]);
+                $candidateAssignment->answers()->updateOrCreate(
+                    ['question_id' => $questionId],
+                    ['answer' => $answer]
+                );
             }
         }
 

@@ -8,9 +8,10 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 const props = defineProps(['test']);
 const test = props.test;
 const questions = test.questions;
+const existingAnswers = test.answers;
 
 const answersObj = Object.fromEntries(
-    Object.keys(questions).map(key => [key, ''])
+    Object.keys(questions).map(key => [key, existingAnswers[key] ?? ''])
 );
 
 const answers = ref(answersObj);
