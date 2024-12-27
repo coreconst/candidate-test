@@ -60,12 +60,18 @@ class User extends Authenticatable
     public function assignedTests(): BelongsToMany
     {
         return $this->belongsToMany(Test::class, 'user_tests')
-            ->withPivot('status');
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function assignments(): HasManyThrough
     {
         return $this->hasManyThrough(UserTest::class, Test::class);
+    }
+
+    public function userTests(): HasMany
+    {
+        return $this->hasMany(UserTest::class);
     }
 
     /**

@@ -1,14 +1,22 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import {Head, router} from '@inertiajs/vue3';
 import InputLabel from "@/Components/InputLabel.vue";
+import {ref} from "vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps(['test']);
 const test = props.test;
 const questions = test.questions;
 
-const submit = () => {
+const answersObj = Object.fromEntries(
+    Object.keys(questions).map(key => [key, ''])
+);
 
+const answers = ref(answersObj);
+
+const submit = () => {
+    router.post(route('candidate-tests.execute', test['id']), {'answers': answers.value});
 };
 </script>
 
@@ -34,9 +42,16 @@ const submit = () => {
                         </div>
                         <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 w-2/3">
                             <form @submit.prevent="submit" class="flex items-start flex-col gap-y-4">
-                                <div v-for="(question, index) in questions" :key="index">
-                                    <InputLabel :for="`question_${index}`" :value="question" />
+                                <div class="w-full flex flex-col items-start gap-y-2" v-for="(question, index) in questions" :key="index">
+                                    <InputLabel :for="`answer_${index}`" :value="question" />
+                                    <input
+                                        :id="`answer_${index}`"
+                                        type="text"
+                                        v-model="answers[index]"
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    />
                                 </div>
+                                <PrimaryButton class="self-end">Done</PrimaryButton>
                             </form>
                         </div>
                     </div>

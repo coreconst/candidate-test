@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/candidate-tests', [CandidateTestController::class, 'index'])->name('candidate-tests.index');
 
         Route::get('/candidate-tests/{testId}', [CandidateTestController::class, 'execute'])->name('candidate-tests.execute');
+        Route::post('/candidate-tests/{testId}', [CandidateTestController::class, 'store']);
     });
 
     Route::middleware(['auth', 'role:recruiter'])->group(function () {
