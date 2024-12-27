@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware(['auth', 'role:candidate'])->group(function () {
         Route::get('/candidate-tests', [CandidateTestController::class, 'index'])->name('candidate-tests.index');
+
+        Route::get('/candidate-tests/{testId}', [CandidateTestController::class, 'execute'])->name('candidate-tests.execute');
     });
 
     Route::middleware(['auth', 'role:recruiter'])->group(function () {
